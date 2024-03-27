@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"math/rand"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -49,7 +50,14 @@ func getMovie(w http.ResponseWriter, r *http.Request) {
 }
 
 func createMovie(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	var movie Movie
 
+	_ = json.NewDecoder(r.Body).Decode(&movie)
+	movie.ID = string((rand.Intn(100000000)))
+	movies = append(movies, movie)
+
+	json.NewEncoder(w).Encode(movie)
 }
 func main() {
 
